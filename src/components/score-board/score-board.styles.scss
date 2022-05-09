@@ -1,0 +1,11 @@
+.score-board {
+    display: flex;
+
+    .score-board-child {
+        border-radius: 5px;
+        height: fit-content;
+        width: fit-content;
+        box-sizing: content-box;
+        background-color: #d8d8d8;
+    }
+}

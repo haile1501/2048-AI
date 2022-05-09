@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 import Tile from '../tile/tile.component';
+import GameOver from '../game-over/game-over.component';
 
 import './game-board.styles.scss';
 
@@ -27,35 +28,6 @@ const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
     const [gameOver, setGameOver] = useState(false);
 
-    const checkSurrounding = (row, col) => {
-        const move_x = [0, 1, -1, 0];
-        const move_y = [1, 0, 0, -1];
-
-        for (let i = 0; i < 4; i++) {
-            let x = row + move_x;
-            let y = col + move_y;
-            if (x >= 0 && x < 4 && y >= 0 && y < 4) {
-                if (board[x][y] === 0 || board[row][col] === board[x][y]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    const checkGameOver = () => {
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                if (board[row][col] === 0) {
-                    return;
-                } else if (checkSurrounding(row, col)) {
-                    return;
-                }
-            }
-        }
-        setGameOver(true);
-    }
-
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         const tileValue = [2, 4];
@@ -66,7 +38,12 @@ const GameBoard = () => {
         newBoard[row][col] = tileValue[Math.floor(Math.random() * 2)];
     }
 
-    const handleKeyDown = event => {
+    const restartGame = () => {
+        setGameOver(false);
+        setBoard(generateTemplate());
+    }
+
+    const handleKeyDown = (event) => {
         if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].indexOf(event.key) > -1) {
             event.preventDefault();
         } else {
@@ -201,15 +178,45 @@ const GameBoard = () => {
     }
 
     useEffect(() => {
+        const checkSurrounding = (row, col) => {
+            const move_x = [0, 1, -1, 0];
+            const move_y = [1, 0, 0, -1];
+    
+            for (let i = 0; i < 4; i++) {
+                let x = row + move_x[i];
+                let y = col + move_y[i];
+                if (x >= 0 && x < 4 && y >= 0 && y < 4) {
+                    if (board[x][y] === 0 || board[row][col] === board[x][y]) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+                if (board[row][col] === 0) {
+                    return;
+                } else if (checkSurrounding(row, col)) {
+                    return;
+                }
+            }
+        }
+        setTimeout(() => setGameOver(true), 2000);
+    }, [board]);
+
+    useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
     });
 
-    checkGameOver();
-
     return (
         <div className={`game-board`}>
+            {gameOver && <GameOver restartGame={restartGame}/>}
+
             {
+
                 board.map((row, indexRow) => {
                     return (
                         row.map((tile, indexColumn) => {
