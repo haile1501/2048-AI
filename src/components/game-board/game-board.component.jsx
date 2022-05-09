@@ -1,0 +1,225 @@
+import { useState, useEffect } from 'react';
+
+import Tile from '../tile/tile.component';
+
+import './game-board.styles.scss';
+
+const generateTemplate = () => {
+    const templateArray = new Array(4);
+    for (let i = 0; i < 4; i++) {
+        templateArray[i] = new Array(4).fill(0);
+    }
+
+    let [row1, row2, col1, col2] = [0, 0, 0, 0];
+    row1 = Math.floor(Math.random() * 4);
+    col1 = Math.floor(Math.random() * 4);
+    templateArray[row1][col1] = 2;
+    do {
+        row2 = Math.floor(Math.random() * 4);
+        col2 = Math.floor(Math.random() * 4);
+    } while (row2 === row1 && col2 === col1);
+    templateArray[row2][col2] = 2;
+
+    return templateArray;
+}
+
+const GameBoard = () => {
+    const [board, setBoard] = useState(() => generateTemplate());
+    const [gameOver, setGameOver] = useState(false);
+
+    const checkSurrounding = (row, col) => {
+        const move_x = [0, 1, -1, 0];
+        const move_y = [1, 0, 0, -1];
+
+        for (let i = 0; i < 4; i++) {
+            let x = row + move_x;
+            let y = col + move_y;
+            if (x >= 0 && x < 4 && y >= 0 && y < 4) {
+                if (board[x][y] === 0 || board[row][col] === board[x][y]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    const checkGameOver = () => {
+        for (let row = 0; row < 4; row++) {
+            for (let col = 0; col < 4; col++) {
+                if (board[row][col] === 0) {
+                    return;
+                } else if (checkSurrounding(row, col)) {
+                    return;
+                }
+            }
+        }
+        setGameOver(true);
+    }
+
+    const generateNewTile = (newBoard) => {
+        let [row, col] = [0, 0];
+        const tileValue = [2, 4];
+        do {
+            row = Math.floor(Math.random() * 4);
+            col = Math.floor(Math.random() * 4);
+        } while (newBoard[row][col] !== 0);
+        newBoard[row][col] = tileValue[Math.floor(Math.random() * 2)];
+    }
+
+    const handleKeyDown = event => {
+        if (['ArrowUp', 'ArrowDown', 'ArrowRight', 'ArrowLeft'].indexOf(event.key) > -1) {
+            event.preventDefault();
+        } else {
+            return;
+        }
+        const newBoard = JSON.parse(JSON.stringify(board));
+        let changed = false;
+        switch (event.key) {
+            case 'ArrowUp':
+                for (let col = 0; col <= 3; col++) {
+                    const colArray = [];
+                    for (let row = 0; row <= 3; row++) {
+                        if (newBoard[row][col] !== 0) {
+                            colArray.push(newBoard[row][col]);
+                            if (row !== colArray.length - 1) {
+                                changed = true;
+                            }
+                        }
+                    }
+                    for (let i = 0; i < colArray.length - 1; i++) {
+                        if (colArray[i] === colArray[i + 1]) {
+                            changed = true;
+                            colArray[i] += colArray[i + 1];
+                            colArray.splice(i + 1, 1);
+                        }
+                    }
+                    if (colArray.length) {
+                        for (let i = 0; i < 4; i++) {
+                            if (colArray[i]) {
+                                newBoard[i][col] = colArray[i];
+                            } else {
+                                newBoard[i][col] = 0;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'ArrowDown':
+                for (let col = 0; col <= 3; col++) {
+                    const colArray = [];
+                    for (let row = 3; row >= 0; row--) {
+                        if (newBoard[row][col] !== 0) {
+                            colArray.push(newBoard[row][col]);
+                            if (3 - row !== colArray.length - 1) {
+                                changed = true;
+                            }
+                        }
+                    }
+                    for (let i = 0; i < colArray.length - 1; i++) {
+                        if (colArray[i] === colArray[i + 1]) {
+                            changed = true;
+                            colArray[i] += colArray[i + 1];
+                            colArray.splice(i + 1, 1);
+                        }
+                    }
+                    if (colArray.length) {
+                        for (let i = 0; i < 4; i++) {
+                            if (colArray[i]) {
+                                newBoard[3 - i][col] = colArray[i];
+                            } else {
+                                newBoard[3 - i][col] = 0;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'ArrowRight':
+                for (let row = 0; row <= 3; row++) {
+                    const rowArray = [];
+                    for (let col = 3; col >= 0; col--) {
+                        if (newBoard[row][col] !== 0) {
+                            rowArray.push(newBoard[row][col]);
+                            if (3 - col !== rowArray.length - 1) {
+                                changed = true;
+                            }
+                        }
+                    }
+                    for (let i = 0; i < rowArray.length - 1; i++) {
+                        if (rowArray[i] === rowArray[i + 1]) {
+                            changed = true;
+                            rowArray[i] += rowArray[i + 1];
+                            rowArray.splice(i + 1, 1);
+                        }
+                    }
+                    if (rowArray.length) {
+                        for (let i = 0; i < 4; i++) {
+                            if (rowArray[i]) {
+                                newBoard[row][3 - i] = rowArray[i];
+                            } else {
+                                newBoard[row][3 - i] = 0;
+                            }
+                        }
+                    }
+                }
+                break;
+            case 'ArrowLeft':
+                for (let row = 0; row <= 3; row++) {
+                    const rowArray = [];
+                    for (let col = 0; col <= 3; col++) {
+                        if (newBoard[row][col] !== 0) {
+                            rowArray.push(newBoard[row][col]);
+                            if (col !== rowArray.length - 1) {
+                                changed = true;
+                            }
+                        }
+                    }
+                    for (let i = 0; i < rowArray.length - 1; i++) {
+                        if (rowArray[i] === rowArray[i + 1]) {
+                            changed = true;
+                            rowArray[i] += rowArray[i + 1];
+                            rowArray.splice(i + 1, 1);
+                        }
+                    }
+                    if (rowArray.length) {
+                        for (let i = 0; i < 4; i++) {
+                            if (rowArray[i]) {
+                                newBoard[row][i] = rowArray[i];
+                            } else {
+                                newBoard[row][i] = 0;
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+        if (changed) {
+            generateNewTile(newBoard);
+            setBoard(newBoard);
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    });
+
+    checkGameOver();
+
+    return (
+        <div className={`game-board`}>
+            {
+                board.map((row, indexRow) => {
+                    return (
+                        row.map((tile, indexColumn) => {
+                            return <Tile key={`${indexRow}${indexColumn}`} value={tile} />
+                        })
+                    )
+                })
+            }
+        </div>
+    )
+}
+
+export default GameBoard;

@@ -1,0 +1,15 @@
+.game-board {
+    width: 550px;
+    height: 550px;
+    background-color: #d8d8d8;
+    margin: 200px auto;
+    display: grid;
+    grid-template: repeat(4, 1fr) / repeat(4, 1fr);
+    border-radius: 6px;
+    gap: 18px;
+    padding: 18px;
+
+    // &.over {
+    //     background-color: red;
+    // }
+}
