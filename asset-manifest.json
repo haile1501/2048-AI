@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Haibeo/2048-AI/static/css/main.ecf2d206.css",
+    "main.js": "/Haibeo/2048-AI/static/js/main.337334f3.js",
+    "index.html": "/Haibeo/2048-AI/index.html",
+    "main.ecf2d206.css.map": "/Haibeo/2048-AI/static/css/main.ecf2d206.css.map",
+    "main.337334f3.js.map": "/Haibeo/2048-AI/static/js/main.337334f3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ecf2d206.css",
+    "static/js/main.337334f3.js"
+  ]
+}
