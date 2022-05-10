@@ -20,7 +20,12 @@ const generateTemplate = () => {
         row2 = Math.floor(Math.random() * 4);
         col2 = Math.floor(Math.random() * 4);
     } while (row2 === row1 && col2 === col1);
-    templateArray[row2][col2] = 2;
+    const prob = Math.random();
+        if (prob < 0.1) {
+            templateArray[row2][col2] = 4;
+        } else {
+            templateArray[row2][col2] = 2;
+        }
 
     return templateArray;
 }
@@ -33,12 +38,16 @@ const GameBoard = () => {
 
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
-        const tileValue = [2, 4];
         do {
             row = Math.floor(Math.random() * 4);
             col = Math.floor(Math.random() * 4);
         } while (newBoard[row][col] !== 0);
-        newBoard[row][col] = tileValue[Math.floor(Math.random() * 2)];
+        const prob = Math.random();
+        if (prob < 0.1) {
+            newBoard[row][col] = 4;
+        } else {
+            newBoard[row][col] = 2;
+        }
     }
 
     const restartGame = () => {
