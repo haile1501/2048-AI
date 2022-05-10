@@ -1,0 +1,55 @@
+.top-board {
+    margin: 0 auto;
+    width: 550px;
+    height: 230px;
+    margin-top: 50px;
+    position: relative;
+    
+    h1 {
+        font-weight: 700;
+        color: #8b7760;
+        font-size: 100px;
+        margin: 0;
+        position: absolute;
+        left: 12px;
+        top: 8px;
+    }
+
+    button {
+        color: white;
+        background-color: #615447;
+        border: none;
+        border-radius: 5px;
+        width: 120px;
+        height: 35px;
+        font-size: 16px;
+        font-weight: 700;
+        box-sizing: content-box;
+        padding: 4px 13px;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        bottom: 40px;
+    }
+
+    p {
+        color: #7c766e;
+        font-weight: 600;
+        position: absolute;
+        font-size: 17px;
+        margin: 0;
+        line-height: 35px;
+        bottom: 43px;
+        left: 5px;
+    }
+
+    span {
+        color: #725b46;
+        font-weight: 700;
+    }
+
+    .score-board {
+        position: absolute;
+        top: 42px;
+    }
+}

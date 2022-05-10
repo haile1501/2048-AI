@@ -1,8 +1,8 @@
 .game-board {
     width: 550px;
     height: 550px;
-    background-color: #d8d8d8;
-    margin: 200px auto;
+    background-color: #cfcccc;
+    margin: 0 auto;
     display: grid;
     grid-template: repeat(4, 1fr) / repeat(4, 1fr);
     border-radius: 6px;

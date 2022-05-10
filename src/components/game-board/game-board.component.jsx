@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import Tile from '../tile/tile.component';
 import GameOver from '../game-over/game-over.component';
+import { GameStateContext } from '../../context/game-state.context';
 
 import './game-board.styles.scss';
 
@@ -28,6 +29,8 @@ const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
     const [gameOver, setGameOver] = useState(false);
 
+    const { setScore, highScore, restart, setRestart } = useContext(GameStateContext);
+
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         const tileValue = [2, 4];
@@ -39,6 +42,7 @@ const GameBoard = () => {
     }
 
     const restartGame = () => {
+        setScore(0);
         setGameOver(false);
         setBoard(generateTemplate());
     }
@@ -51,6 +55,8 @@ const GameBoard = () => {
         }
         const newBoard = JSON.parse(JSON.stringify(board));
         let changed = false;
+        let plusPoint = 0;
+
         switch (event.key) {
             case 'ArrowUp':
                 for (let col = 0; col <= 3; col++) {
@@ -67,6 +73,7 @@ const GameBoard = () => {
                         if (colArray[i] === colArray[i + 1]) {
                             changed = true;
                             colArray[i] += colArray[i + 1];
+                            plusPoint += colArray[i];
                             colArray.splice(i + 1, 1);
                         }
                     }
@@ -96,6 +103,7 @@ const GameBoard = () => {
                         if (colArray[i] === colArray[i + 1]) {
                             changed = true;
                             colArray[i] += colArray[i + 1];
+                            plusPoint += colArray[i];
                             colArray.splice(i + 1, 1);
                         }
                     }
@@ -125,6 +133,7 @@ const GameBoard = () => {
                         if (rowArray[i] === rowArray[i + 1]) {
                             changed = true;
                             rowArray[i] += rowArray[i + 1];
+                            plusPoint += rowArray[i];
                             rowArray.splice(i + 1, 1);
                         }
                     }
@@ -154,6 +163,7 @@ const GameBoard = () => {
                         if (rowArray[i] === rowArray[i + 1]) {
                             changed = true;
                             rowArray[i] += rowArray[i + 1];
+                            plusPoint += rowArray[i];
                             rowArray.splice(i + 1, 1);
                         }
                     }
@@ -173,6 +183,7 @@ const GameBoard = () => {
         }
         if (changed) {
             generateNewTile(newBoard);
+            setScore(score => score + plusPoint);
             setBoard(newBoard);
         }
     }
@@ -181,7 +192,7 @@ const GameBoard = () => {
         const checkSurrounding = (row, col) => {
             const move_x = [0, 1, -1, 0];
             const move_y = [1, 0, 0, -1];
-    
+
             for (let i = 0; i < 4; i++) {
                 let x = row + move_x[i];
                 let y = col + move_y[i];
@@ -203,7 +214,7 @@ const GameBoard = () => {
                 }
             }
         }
-        setTimeout(() => setGameOver(true), 2000);
+        setTimeout(() => setGameOver(true), 1200);
     }, [board]);
 
     useEffect(() => {
@@ -211,9 +222,25 @@ const GameBoard = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     });
 
+    useEffect(() => {
+        if (gameOver) {
+            localStorage.setItem('highScore', JSON.stringify(highScore));
+        }
+    }, [gameOver, highScore]);
+
+    useEffect(() => {
+        if (restart) {
+            localStorage.setItem('highScore', JSON.stringify(highScore));
+            setRestart(false);
+            setGameOver(false);
+            setScore(0);
+            setBoard(generateTemplate());
+        }
+    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver]);
+
     return (
         <div className={`game-board`}>
-            {gameOver && <GameOver restartGame={restartGame}/>}
+            {gameOver && <GameOver restartGame={restartGame} />}
 
             {
 
