@@ -19,7 +19,7 @@ const ScoreBoard = () => {
             </div>
             <div className='score-board-child'>
                 <h2 className='score-type'>BEST</h2>
-                <h2 className='score'>{highScore}</h2>
+                <h2 className='score'>{highScore}ruhuhhu</h2>
             </div>
         </div>
     );
