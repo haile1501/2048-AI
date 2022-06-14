@@ -3,6 +3,8 @@ import { useState, useEffect, useContext } from 'react';
 import Tile from '../tile/tile.component';
 import GameOver from '../game-over/game-over.component';
 import { GameStateContext } from '../../context/game-state.context';
+import { AiContext } from '../../context/ai.context';
+import Algorithms from '../../algorithms/algorithms.component';
 
 import './game-board.styles.scss';
 
@@ -35,7 +37,8 @@ const GameBoard = () => {
     const [gameOver, setGameOver] = useState(false);
 
     const { setScore, highScore, restart, setRestart } = useContext(GameStateContext);
-
+    const { pause } = useContext(AiContext);
+    
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         do {
@@ -86,7 +89,7 @@ const GameBoard = () => {
                             colArray.splice(i + 1, 1);
                         }
                     }
-                    if (colArray.length) {
+                    if (changed) {
                         for (let i = 0; i < 4; i++) {
                             if (colArray[i]) {
                                 newBoard[i][col] = colArray[i];
@@ -116,7 +119,7 @@ const GameBoard = () => {
                             colArray.splice(i + 1, 1);
                         }
                     }
-                    if (colArray.length) {
+                    if (changed) {
                         for (let i = 0; i < 4; i++) {
                             if (colArray[i]) {
                                 newBoard[3 - i][col] = colArray[i];
@@ -146,7 +149,7 @@ const GameBoard = () => {
                             rowArray.splice(i + 1, 1);
                         }
                     }
-                    if (rowArray.length) {
+                    if (changed) {
                         for (let i = 0; i < 4; i++) {
                             if (rowArray[i]) {
                                 newBoard[row][3 - i] = rowArray[i];
@@ -176,7 +179,7 @@ const GameBoard = () => {
                             rowArray.splice(i + 1, 1);
                         }
                     }
-                    if (rowArray.length) {
+                    if (changed) {
                         for (let i = 0; i < 4; i++) {
                             if (rowArray[i]) {
                                 newBoard[row][i] = rowArray[i];
@@ -249,6 +252,7 @@ const GameBoard = () => {
 
     return (
         <div className={`game-board`}>
+            {!pause && <Algorithms board={board} />}
             {gameOver && <GameOver restartGame={restartGame} />}
 
             {

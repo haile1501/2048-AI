@@ -1,14 +1,13 @@
 import GameBoard from "./components/game-board/game-board.component";
-import { GameStateProvider } from "./context/game-state.context";
 import TopBoard from "./components/top-board/top-board.component";
+import SideBar from "./components/side-bar/side-bar.component";
 
 function App() {
   return (
     <div className="main-game">
-      <GameStateProvider>
-        <TopBoard />
-        <GameBoard />
-      </GameStateProvider>
+      <TopBoard />
+      <GameBoard />
+      <SideBar />
     </div>
   );
 }

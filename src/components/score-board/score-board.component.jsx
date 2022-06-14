@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import { GameStateContext } from '../../context/game-state.context';
 
@@ -7,9 +7,11 @@ import './score-board.styles.scss';
 const ScoreBoard = () => {
     const { score, highScore, setHighScore } = useContext(GameStateContext);
 
-    if ( score > highScore ) {
-        setHighScore(score);
-    }
+    useEffect(() => {
+        if (score > highScore) {
+            setHighScore(score);
+        }
+    }, [score, highScore, setHighScore]);
 
     return (
         <div className='score-board'>
@@ -19,7 +21,7 @@ const ScoreBoard = () => {
             </div>
             <div className='score-board-child'>
                 <h2 className='score-type'>BEST</h2>
-                <h2 className='score'>{highScore}ruhuhhu</h2>
+                <h2 className='score'>{highScore}</h2>
             </div>
         </div>
     );

@@ -2,3 +2,9 @@
   box-sizing: border-box;
   font-family: Open Sans;
 }
+
+.main-game {
+  width: 870px;
+  margin: auto;
+  position: relative;
+}

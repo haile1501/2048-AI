@@ -1,10 +1,12 @@
+import Button from '../button/button.component';
+
 import './game-over.styles.scss';
 
 const GameOver = ({ restartGame }) => {
     return (
         <div className='game-over'>
             <h1>Game over!</h1>
-            <button onClick={restartGame}>Play Again</button>
+            <Button onClick={restartGame}>Play Again</Button>
         </div>
     );
 }
