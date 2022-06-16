@@ -7,7 +7,7 @@ import OptionsBar from '../options-bar/options-bar.component';
 import './side-bar.styles.scss';
 
 const MAX_DEPTH = [4, 5, 6];
-const ALGORITHMS = ['Minimax', 'Expectimax'];
+const ALGORITHMS = ['Minimax', 'Expectimax', 'MCTS'];
 
 const SideBar = () => {
     const { pause, setPause, setMaxDepth, algorithm, setAlgorithm } = useContext(AiContext);

@@ -3,11 +3,12 @@ import { useEffect, useContext } from "react";
 import { AiContext } from '../context/ai.context';
 import { minimax } from "./minimax";
 import { expectimax } from "./expectimax";
+import { mcts } from "./mcts";
 
 const ALGORITHMS = {
     Minimax: minimax,
     Expectimax: expectimax,
-    
+    MCTS: mcts
 };
 
 const Algorithms = ({ board }) => {
