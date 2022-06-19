@@ -7,7 +7,7 @@ const maxMove = (board, maxDepth, currentDepth) => {
         return heuristicFunction(board);
     }
 
-    let maxUtility = -1;
+    let maxUtility = -99999999;
     let nextMove = null;
     let endGame = true;
     for (let direction of Object.keys(DIRECTIONS)) {

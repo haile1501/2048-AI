@@ -1,8 +1,8 @@
 import './button.styles.scss';
 
-const Button = ({ children, ...otherProps }) => {
+const Button = ({ children, selected, ...otherProps }) => {
     return (
-        <button className='button' {...otherProps}>{children}</button>
+        <button className={`button ${selected}`} {...otherProps}>{children}</button>
     );
 }
 

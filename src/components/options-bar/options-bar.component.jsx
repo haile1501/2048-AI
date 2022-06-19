@@ -1,7 +1,7 @@
 import './options-bar.styles.scss';
 
-const OptionsBar = ({ children }) => {
-    return <div className='options-bar'>
+const OptionsBar = ({ children, optionType }) => {
+    return <div className={`options-bar ${optionType}`}>
         {children}
     </div>
 }

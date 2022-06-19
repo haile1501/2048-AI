@@ -6,4 +6,8 @@
     box-sizing: content-box;
     cursor: pointer;
     border-radius: 5px;
+
+    &.selected {
+        border: 4px solid white;        
+    }
 }

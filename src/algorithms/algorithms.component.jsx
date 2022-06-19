@@ -12,13 +12,18 @@ const ALGORITHMS = {
 };
 
 const Algorithms = ({ board }) => {
-    const { maxDepth, algorithm } = useContext(AiContext);
+    const { maxDepth, algorithm, numberOfIterations, simulationDepth } = useContext(AiContext);
 
     useEffect(() => {
         const boardCopy = JSON.parse(JSON.stringify(board));
-        const direction = ALGORITHMS[algorithm](boardCopy, maxDepth);
-        setTimeout(() => window.dispatchEvent(new KeyboardEvent('keydown', {'key': direction})), 200);
-    }, [board, algorithm, maxDepth]);
+        let direction = null;
+        if (algorithm === 'MCTS') {
+            direction = ALGORITHMS[algorithm](boardCopy, numberOfIterations, simulationDepth);
+        } else {
+            direction = ALGORITHMS[algorithm](boardCopy, maxDepth);
+        } 
+        setTimeout(() => window.dispatchEvent(new KeyboardEvent('keydown', {'key': direction})), 0);
+    }, [board, algorithm, maxDepth, numberOfIterations, simulationDepth]);
 }
 
 export default Algorithms;

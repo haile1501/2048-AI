@@ -1,9 +1,53 @@
 .options-bar {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     height: fit-content;
     padding: 15px;
+    margin-top: 20px;
+
+    h4 {
+        text-align: center;
+        margin-top: -10px;
+        margin-bottom: 17px;
+    }
+
+    & .other-config {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &.mcts {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mcts-config {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            Button {
+                margin: 0 auto;
+                display: block;
+                margin-top: 20px;
+                width: 70px;
+                height: 25px;
+                padding: 10px 35px;
+                border-radius: 10px;
+                font-size: 14px;
+            }
+        }
+    }
 }
