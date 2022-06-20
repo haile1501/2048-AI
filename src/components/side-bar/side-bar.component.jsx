@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import Button from '../button/button.component';
 import { AiContext } from '../../context/ai.context';
+import { GameStateContext } from '../../context/game-state.context';
 import OptionsBar from '../options-bar/options-bar.component';
 
 import './side-bar.styles.scss';
@@ -11,10 +12,24 @@ const MAX_DEPTH = [4, 5, 6];
 const ALGORITHMS = ['Minimax', 'Expectimax', 'MCTS'];
 
 const SideBar = () => {
-    const { pause, setPause, maxDepth, setMaxDepth, algorithm, setAlgorithm, numberOfIterations, setNumberOfIterations, simulationDepth, setSimulationDepth } = useContext(AiContext);
-    const [mctsConfig, setMctsConfig] = useState({
+    const { pause,
+        setPause,
+        maxDepth,
+        setMaxDepth,
+        algorithm,
+        setAlgorithm,
+        numberOfIterations,
+        setNumberOfIterations,
+        simulationDepth,
+        setSimulationDepth,
+    } = useContext(AiContext);
+
+    const { count, setCount } = useContext(GameStateContext);
+
+    const [config, setConfig] = useState({
         numberOfIterations: numberOfIterations,
-        simulationDepth: simulationDepth
+        simulationDepth: simulationDepth,
+        numberOfPlays: count
     });
 
     const handleClick = () => {
@@ -30,15 +45,16 @@ const SideBar = () => {
     }
 
     const handleInputChange = event => {
-        setMctsConfig(mctsConfig => ({
-            ...mctsConfig,
+        setConfig(config => ({
+            ...config,
             [event.target.id]: event.target.value
         }));
     }
 
     const applyChange = () => {
-        setNumberOfIterations(mctsConfig.numberOfIterations);
-        setSimulationDepth(mctsConfig.simulationDepth);
+        setNumberOfIterations(config.numberOfIterations);
+        setSimulationDepth(config.simulationDepth);
+        setCount(config.numberOfPlays);
     }
 
     return (
@@ -66,14 +82,21 @@ const SideBar = () => {
                         :
                         <div className='mcts-config'>
                             <label htmlFor="numberOfIterations">Number of iterations</label>
-                            <input type="text" name="numberOfIterations" id="numberOfIterations" value={mctsConfig.numberOfIterations} onChange={event => handleInputChange(event)} />
+                            <input type="text" name="numberOfIterations" id="numberOfIterations" value={config.numberOfIterations} onChange={event => handleInputChange(event)} />
                             <label htmlFor="simulationDepth">Simulation depth</label>
-                            <input type="text" name="simulationDepth" id="simulationDepth" value={mctsConfig.simulationDepth} onChange={event => handleInputChange(event)} />
-                            <Button onClick={applyChange}>Apply</Button>
+                            <input type="text" name="simulationDepth" id="simulationDepth" value={config.simulationDepth} onChange={event => handleInputChange(event)} />
                         </div>
                 }
+                <div className='footer'>
+                    <label htmlFor="numberOfPlays">Number of plays</label>
+                    <input type="text" name="numberOfPlays" value={config.numberOfPlays} onChange={event => handleInputChange(event)} id="numberOfPlays" />
+                    <Button onClick={applyChange}>Apply</Button>
+                </div>
             </OptionsBar>
-            <div className='pause-button'><Button onClick={handleClick}>{pause ? 'Run' : 'Pause'}</Button></div>
+            <div>
+
+                <div className='pause-button'><Button onClick={handleClick}>{pause ? 'Run' : 'Pause'}</Button></div>
+            </div>
         </div>
     )
 }

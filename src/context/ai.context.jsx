@@ -15,10 +15,10 @@ export const AiContext = createContext({
 
 export const AiProvider = ({ children }) => {
     const [pause, setPause] = useState(true);
-    const [maxDepth, setMaxDepth] = useState(4);
+    const [maxDepth, setMaxDepth] = useState(6);
     const [algorithm, setAlgorithm] = useState('Minimax');
-    const [numberOfIterations, setNumberOfIterations] = useState(5000);
-    const [simulationDepth, setSimulationDepth] = useState(5000);
+    const [numberOfIterations, setNumberOfIterations] = useState(6000);
+    const [simulationDepth, setSimulationDepth] = useState(6000);
 
     const value = {
         pause,

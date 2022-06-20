@@ -30,8 +30,8 @@ const emptyTiles = board => {
 }
 
 const combinedHeuristic = board => {
-    const monoWeight = 1.0;
-    const smoothWeight = 0.1;
+    const monoWeight = 1.5;
+    const smoothWeight = 0.5;
     const maxWeight = 1.0;
     const emptyWeight = 2.7;
 

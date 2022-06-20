@@ -6,14 +6,18 @@ export const GameStateContext = createContext({
     highScore: null,
     setHighScore: () => null,
     restart: null,
-    setRestart: () => null
+    setRestart: () => null,
+    count: null,
+    setCount: () => null
 });
 
 export const GameStateProvider = ({ children }) => {
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
     const [restart, setRestart] = useState(false);
-    const value = { score, setScore, highScore, setHighScore, restart, setRestart };
+    const [count, setCount] = useState(1);
+
+    const value = { score, setScore, highScore, setHighScore, restart, setRestart, count, setCount };
 
     useEffect(() => {
         const savedHighScore = localStorage.getItem('highScore');
