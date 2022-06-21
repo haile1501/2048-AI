@@ -7,6 +7,9 @@ import { AiContext } from '../../context/ai.context';
 import Algorithms from '../../algorithms/algorithms.component';
 
 import './game-board.styles.scss';
+import axios from 'axios';
+
+const API = "http://localhost:6969";
 
 const generateTemplate = () => {
     const templateArray = new Array(4);
@@ -34,8 +37,8 @@ const generateTemplate = () => {
 
 const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
-    const { setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
-    const { pause } = useContext(AiContext);
+    const { score, setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
+    const { pause, algorithm, maxDepth, numberOfIterations, simulationDepth } = useContext(AiContext);
 
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
@@ -245,6 +248,24 @@ const GameBoard = () => {
             }
         }
     }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
+
+    useEffect(() => {
+        if (gameOver) {
+            axios.post(`${API}/api/v1/add-result/${algorithm}`, {
+                score: score,
+                algorithm: algorithm,
+                maxDepth: maxDepth,
+                iterations: numberOfIterations,
+                simulationDepth: simulationDepth
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => { 
+                console.log(err);
+            })
+        }
+    },[]);
 
     useEffect(() => {
         if (restart) {
