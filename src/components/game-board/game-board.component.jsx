@@ -249,37 +249,37 @@ const GameBoard = () => {
         }
     }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
 
-    // useEffect(() => {
-    //     const maxTile = board => {
-    //         let maxValue = -1;
-    //         for (let row = 0; row < 4; row++) {
-    //             for (let col = 0; col < 4; col++) {
-    //                 if (board[row][col] > 0 && board[row][col] > maxValue) {
-    //                     maxValue = board[row][col];
-    //                 }
-    //             }
-    //         }
+    useEffect(() => {
+        const maxTile = board => {
+            let maxValue = -1;
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 4; col++) {
+                    if (board[row][col] > 0 && board[row][col] > maxValue) {
+                        maxValue = board[row][col];
+                    }
+                }
+            }
 
-    //         return maxValue;
-    //     }
+            return maxValue;
+        }
 
-    //     if (gameOver) {
-    //         axios.post(`${API}${algorithm}`, {
-    //             score: score,
-    //             algorithm: algorithm,
-    //             maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
-    //             iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
-    //             simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
-    //             maxTile: maxTile(board)
-    //         })
-    //         .then(res => {
-    //             console.log(res);
-    //         })
-    //         .catch(err => { 
-    //             console.log(err);
-    //         })
-    //     }
-    // }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
+        if (gameOver) {
+            axios.post(`${API}${algorithm}`, {
+                score: score,
+                algorithm: algorithm,
+                maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
+                iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
+                simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
+                maxTile: maxTile(board)
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => { 
+                console.log(err);
+            })
+        }
+    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
 
     useEffect(() => {
         if (restart) {
