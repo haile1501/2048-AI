@@ -250,13 +250,27 @@ const GameBoard = () => {
     }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
 
     useEffect(() => {
+        const maxTile = board => {
+            let maxValue = -1;
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 4; col++) {
+                    if (board[row][col] > 0 && board[row][col] > maxValue) {
+                        maxValue = board[row][col];
+                    }
+                }
+            }
+
+            return maxValue;
+        }
+
         if (gameOver) {
             axios.post(`${API}/api/v1/add-result/${algorithm}`, {
                 score: score,
                 algorithm: algorithm,
-                maxDepth: maxDepth,
-                iterations: numberOfIterations,
-                simulationDepth: simulationDepth
+                maxDepth: algorithm === 'mcts' ? 0 : maxDepth,
+                iterations: algorithm === 'mcts' ? numberOfIterations : 0,
+                simulationDepth: algorithm === 'mcts' ? simulationDepth: 0,
+                maxTile: maxTile(board)
             })
             .then(res => {
                 console.log(res);
@@ -265,7 +279,7 @@ const GameBoard = () => {
                 console.log(err);
             })
         }
-    },[]);
+    },[gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
 
     useEffect(() => {
         if (restart) {
