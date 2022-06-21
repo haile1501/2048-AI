@@ -7,6 +7,9 @@ import { AiContext } from '../../context/ai.context';
 import Algorithms from '../../algorithms/algorithms.component';
 
 import './game-board.styles.scss';
+import axios from 'axios';
+
+const API = "https://datacounting.herokuapp.com/api/v1/add-result/";
 
 const generateTemplate = () => {
     const templateArray = new Array(4);
@@ -23,22 +26,21 @@ const generateTemplate = () => {
         col2 = Math.floor(Math.random() * 4);
     } while (row2 === row1 && col2 === col1);
     const prob = Math.random();
-        if (prob < 0.1) {
-            templateArray[row2][col2] = 4;
-        } else {
-            templateArray[row2][col2] = 2;
-        }
+    if (prob < 0.1) {
+        templateArray[row2][col2] = 4;
+    } else {
+        templateArray[row2][col2] = 2;
+    }
 
     return templateArray;
 }
 
 const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
-    const [gameOver, setGameOver] = useState(false);
-
-    const { setScore, highScore, restart, setRestart } = useContext(GameStateContext);
-    const { pause } = useContext(AiContext);
-    
+    const { score, setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
+    const { pause, algorithm, maxDepth, numberOfIterations, simulationDepth } = useContext(AiContext);
+  
+  
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         do {
@@ -57,6 +59,7 @@ const GameBoard = () => {
         setScore(0);
         setGameOver(false);
         setBoard(generateTemplate());
+        setTrial(1);
     }
 
     const handleKeyDown = (event) => {
@@ -227,7 +230,7 @@ const GameBoard = () => {
             }
         }
         setTimeout(() => setGameOver(true), 1200);
-    }, [board]);
+    }, [board, setGameOver]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -237,10 +240,47 @@ const GameBoard = () => {
     useEffect(() => {
         if (gameOver) {
             localStorage.setItem('highScore', JSON.stringify(highScore));
+
+            if (trial < count) {
+                setTrial(trial => trial + 1);
+                setScore(0);
+                setGameOver(false);
+                setBoard(generateTemplate());
+            }
+        }
+    }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
+
+    useEffect(() => {
+        const maxTile = board => {
+            let maxValue = -1;
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 4; col++) {
+                    if (board[row][col] > 0 && board[row][col] > maxValue) {
+                        maxValue = board[row][col];
+                    }
+                }
+            }
+
+            return maxValue;
         }
 
-    }, [gameOver, highScore]);
-
+        if (gameOver) {
+            axios.post(`${API}${algorithm}`, {
+                score: score,
+                algorithm: algorithm,
+                maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
+                iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
+                simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
+                maxTile: maxTile(board)
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => { 
+                console.log(err);
+            })
+        }
+    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
     useEffect(() => {
         if (restart) {
             localStorage.setItem('highScore', JSON.stringify(highScore));
@@ -248,14 +288,18 @@ const GameBoard = () => {
             setGameOver(false);
             setScore(0);
             setBoard(generateTemplate());
+
+            if (gameOver) {
+                setTrial(1);
+            }
         }
-    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver]);
+    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver, gameOver, setTrial]);
 
     return (
         <div className={`game-board`}>
-            {!pause && <Algorithms board={board} restartGame={restartGame}/>}
-            {gameOver && <GameOver restartGame={restartGame} />}
 
+            {!pause && <Algorithms board={board} restartGame={restartGame} />}
+            {gameOver && <GameOver restartGame={restartGame} gameOver={gameOver} />}
             {
 
                 board.map((row, indexRow) => {

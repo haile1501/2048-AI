@@ -23,6 +23,8 @@ const SideBar = () => {
         setSimulationDepth,
     } = useContext(AiContext);
 
+    const { count, setCount, setTrial, gameOver } = useContext(GameStateContext);
+
     const [config, setConfig] = useState({
         numberOfIterations: numberOfIterations,
         simulationDepth: simulationDepth,
@@ -48,8 +50,12 @@ const SideBar = () => {
     }
 
     const applyChange = () => {
-        setNumberOfIterations(config.numberOfIterations);
-        setSimulationDepth(config.simulationDepth);
+        if (gameOver) {
+            setTrial(+config.numberOfPlays);
+        }
+        setNumberOfIterations(+config.numberOfIterations);
+        setSimulationDepth(+config.simulationDepth);
+        setCount(+config.numberOfPlays);
     }
 
     return (
@@ -83,6 +89,8 @@ const SideBar = () => {
                         </div>
                 }
                 <div className='footer'>
+                    <label htmlFor="numberOfPlays">Times</label>
+                    <input type="text" name="numberOfPlays" value={config.numberOfPlays} onChange={event => handleInputChange(event)} id="numberOfPlays" />
                     <Button onClick={applyChange}>Apply</Button>
                 </div>
             </OptionsBar>

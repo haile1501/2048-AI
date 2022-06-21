@@ -2,7 +2,6 @@ const LOOK_UP_DIRECTIONS = [
     { x: 1, y: 0 },
     { x: 0, y: 1 },
 ];
-// down and right only
 
 const validPosition = (row, col) => {
     if (row >= 0 && row < 4 && col >= 0 && col < 4) {
@@ -22,7 +21,6 @@ const isEmptyTile = (board, row, col) => {
     return false;
 }
 
-
 const furthestTile = (board, row, col, direction) => {
     
     do {
@@ -35,9 +33,8 @@ const furthestTile = (board, row, col, direction) => {
     return { nextRow, nextCol };
 }
 
-export const smoothness = board => {
-    let smoothnessVal = 0;
-
+export const possibleMerge = board => {
+    let total = 0;
     for (let row = 0; row < 4; row++) {
         for (let col = 0; col < 4; col++) {
             if (board[row][col] !== 0) {
@@ -45,12 +42,12 @@ export const smoothness = board => {
                     const { nextRow, nextCol } = furthestTile(board, row, col, direction);
 
                     if (!isEmptyTile(nextRow, nextCol) && validPosition(nextRow, nextCol)) {
-                        smoothnessVal -= Math.abs(Math.log2(board[nextRow][nextCol]) - Math.log2(board[row][col]));
+                        total++;
                     }
                 }
             }
         }
     }
 
-    return smoothnessVal;
+    return total;
 }
