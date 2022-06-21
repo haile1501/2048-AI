@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import Button from '../button/button.component';
 import { AiContext } from '../../context/ai.context';
+import { GameStateContext } from '../../context/game-state.context';
 import OptionsBar from '../options-bar/options-bar.component';
 
 import './side-bar.styles.scss';
