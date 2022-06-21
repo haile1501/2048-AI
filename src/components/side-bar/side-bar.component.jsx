@@ -2,7 +2,6 @@ import { useContext } from 'react';
 
 import Button from '../button/button.component';
 import { AiContext } from '../../context/ai.context';
-import { GameStateContext } from '../../context/game-state.context';
 import OptionsBar from '../options-bar/options-bar.component';
 
 import './side-bar.styles.scss';
@@ -24,12 +23,9 @@ const SideBar = () => {
         setSimulationDepth,
     } = useContext(AiContext);
 
-    const { count, setCount } = useContext(GameStateContext);
-
     const [config, setConfig] = useState({
         numberOfIterations: numberOfIterations,
         simulationDepth: simulationDepth,
-        numberOfPlays: count
     });
 
     const handleClick = () => {
@@ -54,7 +50,6 @@ const SideBar = () => {
     const applyChange = () => {
         setNumberOfIterations(config.numberOfIterations);
         setSimulationDepth(config.simulationDepth);
-        setCount(config.numberOfPlays);
     }
 
     return (
@@ -88,8 +83,6 @@ const SideBar = () => {
                         </div>
                 }
                 <div className='footer'>
-                    {/* <label htmlFor="numberOfPlays">Number of plays</label>
-                    <input type="text" name="numberOfPlays" value={config.numberOfPlays} onChange={event => handleInputChange(event)} id="numberOfPlays" /> */}
                     <Button onClick={applyChange}>Apply</Button>
                 </div>
             </OptionsBar>
