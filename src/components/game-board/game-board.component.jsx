@@ -23,25 +23,20 @@ const generateTemplate = () => {
         col2 = Math.floor(Math.random() * 4);
     } while (row2 === row1 && col2 === col1);
     const prob = Math.random();
-        if (prob < 0.1) {
-            templateArray[row2][col2] = 4;
-        } else {
-            templateArray[row2][col2] = 2;
-        }
+    if (prob < 0.1) {
+        templateArray[row2][col2] = 4;
+    } else {
+        templateArray[row2][col2] = 2;
+    }
 
     return templateArray;
 }
 
 const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
-    const [gameOver, setGameOver] = useState(false);
-
-    // trials
-    const [trial, setTrial] = useState(0);
-
-    const { setScore, highScore, restart, setRestart, count } = useContext(GameStateContext);
+    const { setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
     const { pause } = useContext(AiContext);
-    
+
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         do {
@@ -60,6 +55,7 @@ const GameBoard = () => {
         setScore(0);
         setGameOver(false);
         setBoard(generateTemplate());
+        setTrial(1);
     }
 
     const handleKeyDown = (event) => {
@@ -230,7 +226,7 @@ const GameBoard = () => {
             }
         }
         setTimeout(() => setGameOver(true), 1200);
-    }, [board]);
+    }, [board, setGameOver]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -240,13 +236,15 @@ const GameBoard = () => {
     useEffect(() => {
         if (gameOver) {
             localStorage.setItem('highScore', JSON.stringify(highScore));
-        }
 
-        if (gameOver && trial < count) {
-            setTrial(trial => trial + 1);
+            if (trial < count) {
+                setTrial(trial => trial + 1);
+                setScore(0);
+                setGameOver(false);
+                setBoard(generateTemplate());
+            }
         }
-
-    }, [gameOver, highScore, trial, count]);
+    }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
 
     useEffect(() => {
         if (restart) {
@@ -255,13 +253,17 @@ const GameBoard = () => {
             setGameOver(false);
             setScore(0);
             setBoard(generateTemplate());
+
+            if (gameOver) {
+                setTrial(1);
+            }
         }
-    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver]);
+    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver, gameOver, setTrial]);
 
     return (
         <div className={`game-board`}>
-            {!pause && <Algorithms board={board} restartGame={restartGame}/>}
-            {gameOver && <GameOver restartGame={restartGame} trial={trial}/>}
+            {!pause && <Algorithms board={board} restartGame={restartGame} />}
+            {gameOver && <GameOver restartGame={restartGame} gameOver={gameOver} />}
 
             {
 

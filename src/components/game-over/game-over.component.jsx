@@ -1,15 +1,8 @@
-import { useEffect } from 'react';
 import Button from '../button/button.component';
 
 import './game-over.styles.scss';
 
-const GameOver = ({ restartGame, trial }) => {
-    
-    useEffect(() => {
-        if (trial < 100) {
-            setTimeout(() => document.querySelector('button').click(), 50);
-        }
-    }, [trial]);
+const GameOver = ({ restartGame }) => {
 
     return (
         <div className='game-over'>
