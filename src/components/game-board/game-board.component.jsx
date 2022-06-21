@@ -39,7 +39,8 @@ const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
     const { score, setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
     const { pause, algorithm, maxDepth, numberOfIterations, simulationDepth } = useContext(AiContext);
-
+  
+  
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         do {
@@ -280,7 +281,6 @@ const GameBoard = () => {
             })
         }
     }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
-
     useEffect(() => {
         if (restart) {
             localStorage.setItem('highScore', JSON.stringify(highScore));
@@ -297,9 +297,9 @@ const GameBoard = () => {
 
     return (
         <div className={`game-board`}>
+
             {!pause && <Algorithms board={board} restartGame={restartGame} />}
             {gameOver && <GameOver restartGame={restartGame} gameOver={gameOver} />}
-
             {
 
                 board.map((row, indexRow) => {

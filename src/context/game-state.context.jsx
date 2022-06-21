@@ -25,6 +25,7 @@ export const GameStateProvider = ({ children }) => {
 
     const value = { score, setScore, highScore, setHighScore, restart, setRestart, count, setCount, trial, setTrial, gameOver, setGameOver };
 
+
     useEffect(() => {
         const savedHighScore = localStorage.getItem('highScore');
         if (!savedHighScore) {
