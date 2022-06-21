@@ -88,8 +88,8 @@ const SideBar = () => {
                         </div>
                 }
                 <div className='footer'>
-                    <label htmlFor="numberOfPlays">Number of plays</label>
-                    <input type="text" name="numberOfPlays" value={config.numberOfPlays} onChange={event => handleInputChange(event)} id="numberOfPlays" />
+                    {/* <label htmlFor="numberOfPlays">Number of plays</label>
+                    <input type="text" name="numberOfPlays" value={config.numberOfPlays} onChange={event => handleInputChange(event)} id="numberOfPlays" /> */}
                     <Button onClick={applyChange}>Apply</Button>
                 </div>
             </OptionsBar>
