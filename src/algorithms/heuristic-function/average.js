@@ -1,4 +1,4 @@
-export const greedy = board => {
+export const average = board => {
     let sum = 0;
     let numberedTiles = 0;
 

@@ -1,7 +1,8 @@
-import { greedy } from "./greedy";
+import { average } from "./average";
 import { monotonicity } from "./monotonicity";
 import { smoothness } from "./smoothness";
 import { snake } from "./snake";
+import { possibleMerge } from "./possibleMerge";
 
 const maxValue = board => {
     let max = 0;
@@ -30,19 +31,18 @@ const emptyTiles = board => {
 }
 
 const combinedHeuristic = board => {
-    const monoWeight = 2.5;
-    const smoothWeight = 0.5;
+    const monoWeight = 1.0;
+    const smoothWeight = 0.1;
     const maxWeight = 1.0;
-    const emptyWeight = 1.5;
+    const emptyWeight = 2.5;
 
     return monoWeight * monotonicity(board)
         + smoothWeight * smoothness(board)
-        + maxWeight * greedy(board)
+        + maxWeight * maxValue(board)
         + emptyWeight * emptyTiles(board);
 }
 
 const heuristicFunctions = {
-    greedy: greedy,
     monotonicity: monotonicity,
     smoothness: smoothness,
     combinedHeuristic: combinedHeuristic
