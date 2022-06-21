@@ -1,7 +1,7 @@
 import { greedy } from "./greedy";
 import { monotonicity } from "./monotonicity";
 import { smoothness } from "./smoothness";
-//import { snake } from "./snake";
+import { snake } from "./snake";
 
 const maxValue = board => {
     let max = 0;
@@ -30,14 +30,14 @@ const emptyTiles = board => {
 }
 
 const combinedHeuristic = board => {
-    const monoWeight = 1.5;
+    const monoWeight = 2.5;
     const smoothWeight = 0.5;
     const maxWeight = 1.0;
-    const emptyWeight = 2.7;
+    const emptyWeight = 1.5;
 
     return monoWeight * monotonicity(board)
         + smoothWeight * smoothness(board)
-        + maxWeight * maxValue(board)
+        + maxWeight * greedy(board)
         + emptyWeight * emptyTiles(board);
 }
 

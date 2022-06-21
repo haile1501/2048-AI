@@ -9,7 +9,7 @@ import Algorithms from '../../algorithms/algorithms.component';
 import './game-board.styles.scss';
 import axios from 'axios';
 
-const API = "http://localhost:6969";
+const API = "https://datacounting.herokuapp.com/api/v1/add-result/";
 
 const generateTemplate = () => {
     const templateArray = new Array(4);
@@ -264,7 +264,7 @@ const GameBoard = () => {
         }
 
         if (gameOver) {
-            axios.post(`${API}/api/v1/add-result/${algorithm}`, {
+            axios.post(`${API}${algorithm}`, {
                 score: score,
                 algorithm: algorithm,
                 maxDepth: algorithm === 'mcts' ? 0 : maxDepth,
@@ -279,7 +279,7 @@ const GameBoard = () => {
                 console.log(err);
             })
         }
-    },[gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
+    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
 
     useEffect(() => {
         if (restart) {

@@ -5,7 +5,7 @@ const LOOK_UP_DIRECTIONS = [
 // down and right only
 
 const validPosition = (row, col) => {
-    if (row > 0 && row < 4 && col > 0 && col < 4) {
+    if (row >= 0 && row < 4 && col >= 0 && col < 4) {
         return true;
     }
 
@@ -30,7 +30,9 @@ const furthestTile = (board, row, col, direction) => {
         col += direction.y;
     } while (row < 4 && col < 4 && isEmptyTile(board, row, col));
 
-    return { row, col };
+    const nextRow = row;
+    const nextCol = col;
+    return { nextRow, nextCol };
 }
 
 export const smoothness = board => {
@@ -42,7 +44,7 @@ export const smoothness = board => {
                 for (let direction of LOOK_UP_DIRECTIONS) {
                     const { nextRow, nextCol } = furthestTile(board, row, col, direction);
 
-                    if (isEmptyTile(nextRow, nextCol)) {
+                    if (!isEmptyTile(nextRow, nextCol) && validPosition(nextRow, nextCol)) {
                         smoothnessVal -= Math.abs(Math.log2(board[nextRow][nextCol]) - Math.log2(board[row][col]));
                     }
                 }
