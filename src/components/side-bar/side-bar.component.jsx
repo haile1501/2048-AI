@@ -28,6 +28,7 @@ const SideBar = () => {
     const [config, setConfig] = useState({
         numberOfIterations: numberOfIterations,
         simulationDepth: simulationDepth,
+        numberOfPlays: count
     });
 
     const handleClick = () => {
