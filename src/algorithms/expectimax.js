@@ -36,7 +36,8 @@ const chanceMove = (board, maxDepth, currentDepth) => {
         return heuristicFunction(board);
     }
 
-    let totalUtility = 0;
+    let totalUtility_4 = 0;
+    let totalUtility_2 = 0;
     let totalNode = 0;
     for (let row = 0; row <= 3; row++) {
         for (let col = 0; col <= 3; col++) {
@@ -44,17 +45,22 @@ const chanceMove = (board, maxDepth, currentDepth) => {
                 for (let tile of [2, 4]) {
                     totalNode++;
                     board[row][col] = tile;
-                    totalUtility += maxMove(board, maxDepth, currentDepth + 1);
+                    if (tile === 2) {
+                        totalUtility_2 += maxMove(board, maxDepth, currentDepth + 1);
+                    } else {
+                        totalUtility_4 += maxMove(board, maxDepth, currentDepth + 1);
+                    }
+                    
                 }
                 board[row][col] = 0;
             }
         }
     }
 
-    return totalUtility / totalNode;
+    return (totalUtility_2 * 0.9 + totalUtility_4 * 0.1) / totalNode;
 }
 
 export const expectimax = (board, maxDepth) => {
-    
+
     return maxMove(board, maxDepth, 0);
 }

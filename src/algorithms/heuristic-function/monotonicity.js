@@ -4,7 +4,7 @@ export const monotonicity = board => {
         down: 0,
         right: 0,
         left: 0
-    };
+    }
 
     // up/down evaluation
     for (let col = 0; col < 4; col++) {
@@ -26,9 +26,9 @@ export const monotonicity = board => {
             const nextTile = board[row][col] !== 0 ? Math.log2(board[row][col]) : 0;
 
             if (prevTile > nextTile) {
-                directionsEval.up += nextTile - prevTile;
+                directionsEval.up += (nextTile - prevTile);
             } else if (prevTile < nextTile) {
-                directionsEval.down += prevTile - nextTile;
+                directionsEval.down += (prevTile - nextTile);
             }
             prev = row;
         }
@@ -54,9 +54,9 @@ export const monotonicity = board => {
             const nextTile = board[row][col] !== 0 ? Math.log2(board[row][col]) : 0;
 
             if (prevTile > nextTile) {
-                directionsEval.left += nextTile - prevTile;
+                directionsEval.left += (nextTile - prevTile);
             } else if (prevTile < nextTile) {
-                directionsEval.right += prevTile - nextTile;
+                directionsEval.right += (prevTile - nextTile);
             }
             prev = col;
         }

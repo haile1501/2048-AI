@@ -2,7 +2,10 @@ const LOOK_UP_DIRECTIONS = [
     { x: 1, y: 0 },
     { x: 0, y: 1 },
 ];
-// down and right only
+
+
+
+
 
 const validPosition = (row, col) => {
     if (row >= 0 && row < 4 && col >= 0 && col < 4) {
@@ -18,13 +21,13 @@ const isEmptyTile = (board, row, col) => {
             return true;
         }
     }
-    
+
     return false;
 }
 
 
 const furthestTile = (board, row, col, direction) => {
-    
+
     do {
         row += direction.x;
         col += direction.y;
