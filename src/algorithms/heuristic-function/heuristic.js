@@ -4,6 +4,26 @@ import { smoothness } from "./smoothness";
 // import { snake } from "./snake";
 import { possibleMerge } from "./possibleMerge";
 
+
+const weightedMatrix = [[4, 3, 2, 1],
+                        [5, 6, 7, 8],
+                        [12, 11, 10, 9],
+                        [100, 300, 600, 1200]];
+
+
+const calculateBoard = board => {
+    let result = 0;
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+            if (board[row][col] !== 0) {
+                result += weightedMatrix[row][col] * board[row][col];
+            }
+        }
+    }
+
+    return result;
+}
+
 const maxValue = board => {
     let max = 0;
     for (let row = 0; row < 4; row++) {
@@ -56,16 +76,20 @@ const combinedHeuristic = board => {
     const monoWeight = 1.0;
     const smoothWeight = 0.1;
     const maxWeight = 1.0;
-    const emptyWeight = 2.5;
-    const maxTileCornerWeight = 1.25;
-    //const possibleWeight = 1.25;
+    const emptyWeight = 2.7;
+    //const maxTileCornerWeight = 1.25;
+    const possibleWeight = 1.5;
+    //const averageWeight = 15;
 
-    return monoWeight * monotonicity(board)
+    //return 
+    return  monotonicity(board) * monoWeight
         + smoothWeight * smoothness(board)
-        + maxTileCornerWeight * maxTileAtCorner(board)
+        //+ maxTileCornerWeight * maxTileAtCorner(board)
         + emptyWeight * emptyTiles(board)
-        //+ possibleWeight * possibleMerge(board)
-        + maxWeight * maxValue(board);
+        + maxWeight * maxValue(board)
+        //+ monoWeight * monotonicity(board)
+        + possibleWeight * possibleMerge(board)
+        //+ averageWeight * average(board);
 }
 
 const heuristicFunctions = {

@@ -10,7 +10,9 @@ export const AiContext = createContext({
     numberOfIterations: null,
     setNumberOfIterations: () => null,
     simulationDepth: null,
-    setSimulationDepth: () => null
+    setSimulationDepth: () => null,
+    changeWhenOver: null,
+    setChangeWhenOver: () => null
 });
 
 export const AiProvider = ({ children }) => {
@@ -19,6 +21,7 @@ export const AiProvider = ({ children }) => {
     const [algorithm, setAlgorithm] = useState('Minimax');
     const [numberOfIterations, setNumberOfIterations] = useState(6000);
     const [simulationDepth, setSimulationDepth] = useState(6000);
+    const [changeWhenOver, setChangeWhenOver] = useState(false);
 
     const value = {
         pause,
@@ -30,7 +33,8 @@ export const AiProvider = ({ children }) => {
         numberOfIterations,
         setNumberOfIterations,
         simulationDepth,
-        setSimulationDepth
+        setSimulationDepth,
+        changeWhenOver, setChangeWhenOver
     };
 
     return <AiContext.Provider value={value}>

@@ -5,7 +5,7 @@ export const average = board => {
     for (let row = 0; row <= 3; row++) {
         for (let col = 0; col <= 3; col++) {
             if (board[row][col] !== 0) {
-                sum += Math.log2(board[row][col]);
+                sum += board[row][col];
                 numberedTiles++;
             }
         }

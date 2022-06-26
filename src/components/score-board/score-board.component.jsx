@@ -5,8 +5,9 @@ import { GameStateContext } from '../../context/game-state.context';
 import './score-board.styles.scss';
 
 const ScoreBoard = () => {
+    
     const { score, highScore, setHighScore } = useContext(GameStateContext);
-
+    
     useEffect(() => {
         if (score > highScore) {
             setHighScore(score);

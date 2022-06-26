@@ -42,7 +42,9 @@ export const possibleMerge = board => {
                     const { nextRow, nextCol } = furthestTile(board, row, col, direction);
 
                     if (!isEmptyTile(nextRow, nextCol) && validPosition(nextRow, nextCol)) {
-                        total++;
+                        if (board[nextRow][nextCol] === board[row][col]) {
+                            total++;
+                        }
                     }
                 }
             }
