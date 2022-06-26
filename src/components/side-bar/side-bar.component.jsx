@@ -22,6 +22,7 @@ const SideBar = () => {
         setNumberOfIterations,
         simulationDepth,
         setSimulationDepth,
+        setChangeWhenOver
     } = useContext(AiContext);
 
     const { count, setCount, setTrial, gameOver } = useContext(GameStateContext);
@@ -41,6 +42,9 @@ const SideBar = () => {
     }
 
     const handleChange = event => {
+        if (gameOver) {
+            setChangeWhenOver(true);
+        }
         setAlgorithm(event.target.value);
     }
 
@@ -53,6 +57,7 @@ const SideBar = () => {
 
     const applyChange = () => {
         if (gameOver) {
+            setChangeWhenOver(true);
             setTrial(+config.numberOfPlays);
         }
         setNumberOfIterations(+config.numberOfIterations);
@@ -98,7 +103,7 @@ const SideBar = () => {
             </OptionsBar>
             <div>
 
-                <div className='pause-button'><Button onClick={handleClick}>{pause ? 'Run' : 'Pause'}</Button></div>
+                <div className='pause-button'><Button onClick={handleClick}>{pause ? 'Run AI' : 'Pause AI'}</Button></div>
             </div>
         </div>
     )

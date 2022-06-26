@@ -1,0 +1,34 @@
+.result-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 402px;
+    padding: 16px 15px;
+    z-index: 11;
+
+    .result-block {
+        width: 20%;
+        text-align: center;
+        
+        &:nth-child(1) {
+            width: 6%;
+        }
+
+        &:nth-child(2) {
+            width: 54%;
+        }
+    }
+
+    &.odd {
+        background-color: #d3c4b9;
+    }
+
+    &.even { 
+        background-color: #e6dfd0;
+    }
+
+    &.best {
+        background-color: rgb(252, 252, 94);
+    }
+
+}

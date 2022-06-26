@@ -49,6 +49,7 @@ export const smoothness = board => {
 
                     if (!isEmptyTile(nextRow, nextCol) && validPosition(nextRow, nextCol)) {
                         smoothnessVal -= Math.abs(Math.log2(board[nextRow][nextCol]) - Math.log2(board[row][col]));
+                        //smoothnessVal -= Math.abs(board[nextRow][nextCol] - board[row][col]);
                     }
                 }
             }

@@ -1,0 +1,46 @@
+.stats-board {
+    width: 402px;
+    height: 550px;
+    background-color: #dfd1d1;
+    position: absolute;
+    bottom: 0;
+    //left: -419px;
+    border-radius: 6px;
+    padding: 30px 0px;
+    color: #1f1811;
+
+    .stats-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 13px;
+        padding: 0 15px;
+
+        .stats-header-block {
+            width: 20%;
+            text-align: center;
+
+            &:nth-child(1) {
+                width: 6%;
+            }
+
+            &:nth-child(2) {
+                width: 54%;
+            }
+        }
+    }
+
+    .results-container {
+        width: 402px;
+        max-height: 368px;
+        overflow: scroll;
+    }
+
+    .comment {
+        font-size: 14px;
+        margin-left: 30px;
+        letter-spacing: 0.02rem;
+        position: absolute;
+        bottom: 10px;
+    }
+}

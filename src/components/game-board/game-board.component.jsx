@@ -1,13 +1,16 @@
+import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
+
 
 import Tile from '../tile/tile.component';
 import GameOver from '../game-over/game-over.component';
 import { GameStateContext } from '../../context/game-state.context';
 import { AiContext } from '../../context/ai.context';
+import { RecordContext } from '../../context/record.context';
 import Algorithms from '../../algorithms/algorithms.component';
 
 import './game-board.styles.scss';
-import axios from 'axios';
+
 
 const API = "https://datacounting.herokuapp.com/api/v1/add-result/";
 
@@ -37,10 +40,12 @@ const generateTemplate = () => {
 
 const GameBoard = () => {
     const [board, setBoard] = useState(() => generateTemplate());
-    const { score, setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver } = useContext(GameStateContext);
-    const { pause, algorithm, maxDepth, numberOfIterations, simulationDepth } = useContext(AiContext);
+    const [maxTile, setMaxTile] = useState(0);
+    const { score, setScore, highScore, restart, setRestart, count, trial, setTrial, gameOver, setGameOver, steps, setSteps , bestRecord, setBestRecord} = useContext(GameStateContext);
+    const { pause, algorithm, maxDepth, numberOfIterations, simulationDepth, changeWhenOver, setChangeWhenOver } = useContext(AiContext);
+    const { setRecord } = useContext(RecordContext);
   
-  
+
     const generateNewTile = (newBoard) => {
         let [row, col] = [0, 0];
         do {
@@ -58,8 +63,11 @@ const GameBoard = () => {
     const restartGame = () => {
         setScore(0);
         setGameOver(false);
+        setSteps(0);
         setBoard(generateTemplate());
         setTrial(1);
+        setChangeWhenOver(false);
+        setMaxTile(0);
     }
 
     const handleKeyDown = (event) => {
@@ -71,6 +79,7 @@ const GameBoard = () => {
         const newBoard = JSON.parse(JSON.stringify(board));
         let changed = false;
         let plusPoint = 0;
+        let maxTileTmp = maxTile;
 
         switch (event.key) {
             case 'ArrowUp':
@@ -96,6 +105,10 @@ const GameBoard = () => {
                         for (let i = 0; i < 4; i++) {
                             if (colArray[i]) {
                                 newBoard[i][col] = colArray[i];
+
+                                if (colArray[i] > maxTileTmp) {
+                                    maxTileTmp = colArray[i];
+                                }
                             } else {
                                 newBoard[i][col] = 0;
                             }
@@ -126,6 +139,10 @@ const GameBoard = () => {
                         for (let i = 0; i < 4; i++) {
                             if (colArray[i]) {
                                 newBoard[3 - i][col] = colArray[i];
+
+                                if (colArray[i] > maxTileTmp) {
+                                    maxTileTmp = colArray[i];
+                                }
                             } else {
                                 newBoard[3 - i][col] = 0;
                             }
@@ -156,6 +173,10 @@ const GameBoard = () => {
                         for (let i = 0; i < 4; i++) {
                             if (rowArray[i]) {
                                 newBoard[row][3 - i] = rowArray[i];
+
+                                if (rowArray[i] > maxTileTmp) {
+                                    maxTileTmp = rowArray[i];
+                                }
                             } else {
                                 newBoard[row][3 - i] = 0;
                             }
@@ -186,6 +207,10 @@ const GameBoard = () => {
                         for (let i = 0; i < 4; i++) {
                             if (rowArray[i]) {
                                 newBoard[row][i] = rowArray[i];
+
+                                if (rowArray[i] > maxTileTmp) {
+                                    maxTileTmp = rowArray[i];
+                                }
                             } else {
                                 newBoard[row][i] = 0;
                             }
@@ -200,6 +225,10 @@ const GameBoard = () => {
             generateNewTile(newBoard);
             setScore(score => score + plusPoint);
             setBoard(newBoard);
+            if (maxTileTmp <= 2048 && maxTile !== 2048) {
+                setSteps(steps =>  steps + 1);
+            }
+            setMaxTile(maxTileTmp);
         }
     }
 
@@ -238,40 +267,56 @@ const GameBoard = () => {
     });
 
     useEffect(() => {
+        if (gameOver && !changeWhenOver) {
+            const result = {};
+            setRecord(record => {
+                const newRecord = [...record];
+                if (algorithm === 'MCTS') {
+                    result.algorithm = `${algorithm} (${numberOfIterations}-${simulationDepth})`;
+                } else {
+                    result.algorithm = `${algorithm} (${maxDepth})`;
+                }
+
+                result.tile = maxTile;
+                result.steps = maxTile >= 2048 ? steps : 'Failed';
+                newRecord.push(result);
+                
+                return newRecord;
+            });
+
+            if (maxTile > bestRecord.tile || (maxTile === bestRecord.tile && steps < bestRecord.steps)) {
+                setBestRecord(result);
+                setChangeWhenOver(true);
+            }
+        }
+    }, [gameOver, board, steps, algorithm, numberOfIterations, simulationDepth, maxDepth, setRecord, changeWhenOver, maxTile, bestRecord, setBestRecord, setChangeWhenOver]);
+
+    useEffect(() => {
         if (gameOver) {
             localStorage.setItem('highScore', JSON.stringify(highScore));
+            localStorage.setItem('bestRecord', JSON.stringify(bestRecord));
 
             if (trial < count) {
                 setTrial(trial => trial + 1);
                 setScore(0);
+                setSteps(0);
                 setGameOver(false);
+                setMaxTile(0);
                 setBoard(generateTemplate());
+                setChangeWhenOver(false);
             }
         }
-    }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard]);
-
+    }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard, setSteps, bestRecord, setChangeWhenOver]);
+    
     useEffect(() => {
-        const maxTile = board => {
-            let maxValue = -1;
-            for (let row = 0; row < 4; row++) {
-                for (let col = 0; col < 4; col++) {
-                    if (board[row][col] > 0 && board[row][col] > maxValue) {
-                        maxValue = board[row][col];
-                    }
-                }
-            }
-
-            return maxValue;
-        }
-
-        if (gameOver) {
+        if (gameOver && !changeWhenOver) {
             axios.post(`${API}${algorithm}`, {
                 score: score,
                 algorithm: algorithm,
                 maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
                 iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
                 simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
-                maxTile: maxTile(board)
+                maxTile: maxTile
             })
             .then(res => {
                 console.log(res);
@@ -280,25 +325,53 @@ const GameBoard = () => {
                 console.log(err);
             })
         }
-    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board]);
+    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board, changeWhenOver, maxTile]);
+
     useEffect(() => {
         if (restart) {
+
+            if (!changeWhenOver) {
+                const result = {};
+                setRecord(record => {
+                    const newRecord = [...record];
+                    if (algorithm === 'MCTS') {
+                        result.algorithm = `${algorithm} (${numberOfIterations}-${simulationDepth})`;
+                    } else {
+                        result.algorithm = `${algorithm} (${maxDepth})`;
+                    }
+    
+                    result.tile = maxTile;
+                    result.steps = maxTile >= 2048 ? steps : 'Failed';
+                    newRecord.push(result);
+                    
+                    return newRecord;
+                });
+    
+                if (maxTile > bestRecord.tile || (maxTile === bestRecord.tile && steps < bestRecord.steps)) {
+                    setBestRecord(result);
+                    localStorage.setItem('bestRecord', JSON.stringify(result));
+                }
+            }
+
             localStorage.setItem('highScore', JSON.stringify(highScore));
             setRestart(false);
             setGameOver(false);
             setScore(0);
+            setSteps(0);
+            setMaxTile(0);
+            setChangeWhenOver(false);
             setBoard(generateTemplate());
 
             if (gameOver) {
                 setTrial(1);
             }
         }
-    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver, gameOver, setTrial]);
+    }, [restart, setRestart, setScore, setBoard, highScore, setGameOver, gameOver, setTrial, setSteps, setChangeWhenOver, steps, algorithm, bestRecord, maxDepth, maxTile, numberOfIterations, simulationDepth, setBestRecord, setRecord, changeWhenOver]);
 
     return (
         <div className={`game-board`}>
 
-            {!pause && <Algorithms board={board} restartGame={restartGame} />}
+            {!pause && <Algorithms board={board} />}
             {gameOver && <GameOver restartGame={restartGame} gameOver={gameOver} />}
             {
 
