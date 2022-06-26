@@ -51,6 +51,7 @@ const minMove = (board, maxDepth, currentDepth, alpha, beta) => {
                         beta = Math.min(beta, minUtility);
 
                         if (beta <= alpha) {
+                            board[row][col] = 0;
                             return minUtility;
                         }
                     }

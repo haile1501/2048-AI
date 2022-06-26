@@ -308,24 +308,24 @@ const GameBoard = () => {
         }
     }, [gameOver, highScore, count, trial, setTrial, setScore, setGameOver, setBoard, setSteps, bestRecord, setChangeWhenOver]);
     
-    useEffect(() => {
-        if (gameOver && !changeWhenOver) {
-            axios.post(`${API}${algorithm}`, {
-                score: score,
-                algorithm: algorithm,
-                maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
-                iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
-                simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
-                maxTile: maxTile
-            })
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => { 
-                console.log(err);
-            })
-        }
-    }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board, changeWhenOver, maxTile]);
+    // useEffect(() => {
+    //     if (gameOver && !changeWhenOver) {
+    //         axios.post(`${API}${algorithm}`, {
+    //             score: score,
+    //             algorithm: algorithm,
+    //             maxDepth: algorithm === 'MCTS' ? 0 : maxDepth,
+    //             iterations: algorithm === 'MCTS' ? numberOfIterations : 0,
+    //             simulationDepth: algorithm === 'MCTS' ? simulationDepth: 0,
+    //             maxTile: maxTile
+    //         })
+    //         .then(res => {
+    //             console.log(res);
+    //         })
+    //         .catch(err => { 
+    //             console.log(err);
+    //         })
+    //     }
+    // }, [gameOver, algorithm, simulationDepth, numberOfIterations, maxDepth, score, board, changeWhenOver, maxTile]);
 
     useEffect(() => {
         if (restart) {
