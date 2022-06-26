@@ -2,7 +2,7 @@ import { DIRECTIONS } from './ai-controller';
 
 import { heuristicFunction } from './heuristic-function/heuristic';
 
-const maxMove = (board, maxDepth, currentDepth) => {
+const maxMove = (board, maxDepth, currentDepth, alpha, beta) => {
     if (currentDepth === maxDepth) {
         return heuristicFunction(board);
     }
@@ -17,6 +17,11 @@ const maxMove = (board, maxDepth, currentDepth) => {
             let childUtility = minMove(newBoard, maxDepth, currentDepth + 1);
             if (childUtility > maxUtility) {
                 maxUtility = childUtility;
+                alpha = Math.max(alpha, maxUtility);
+
+                if (beta <= alpha) {
+                    return maxUtility;
+                }
                 nextMove = direction;
             }
         }
@@ -29,7 +34,7 @@ const maxMove = (board, maxDepth, currentDepth) => {
     return currentDepth === 0 ? nextMove : maxUtility;
 }
 
-const minMove = (board, maxDepth, currentDepth) => {
+const minMove = (board, maxDepth, currentDepth, alpha, beta) => {
     if (currentDepth === maxDepth) {
         return heuristicFunction(board);
     }
@@ -43,6 +48,11 @@ const minMove = (board, maxDepth, currentDepth) => {
                     let childUtility = maxMove(board, maxDepth, currentDepth + 1);
                     if (childUtility < minUtility) {
                         minUtility = childUtility;
+                        beta = Math.min(beta, minUtility);
+
+                        if (beta <= alpha) {
+                            return minUtility;
+                        }
                     }
                 }
                 board[row][col] = 0;
@@ -55,7 +65,7 @@ const minMove = (board, maxDepth, currentDepth) => {
 
 export const minimax = (board, maxDepth) => {
 
-    return maxMove(board, maxDepth, 0);
+    return maxMove(board, maxDepth, 0, -99999999, 99999999);
 }
 
 /**
