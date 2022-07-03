@@ -75,18 +75,18 @@ const maxTileAtCorner = board => {
 const combinedHeuristic = board => {
     const monoWeight = 1.0;
     const smoothWeight = 0.1;
-    const maxWeight = 1.0;
+    //const maxWeight = 1.0;
     const emptyWeight = 2.7;
-    //const maxTileCornerWeight = 1.25;
-    const possibleWeight = 1.2;
+    const maxTileCornerWeight = 1.5;
+    const possibleWeight = 1.0;
     //const averageWeight = 15;
 
     //return 
     return  monotonicity(board) * monoWeight
         + smoothWeight * smoothness(board)
-        //+ maxTileCornerWeight * maxTileAtCorner(board)
+        + maxTileCornerWeight * maxTileAtCorner(board)
         + emptyWeight * emptyTiles(board)
-        + maxWeight * maxValue(board)
+        //+ maxWeight * maxValue(board)
         //+ monoWeight * monotonicity(board)
         + possibleWeight * possibleMerge(board)
         //+ averageWeight * average(board);

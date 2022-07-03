@@ -40,10 +40,22 @@ const furthestTile = (board, row, col, direction) => {
 
 export const smoothness = board => {
     let smoothnessVal = 0;
+    let max = 0;
+    let maxRow = 0;
+    let maxCol = 0;
+    for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+            if (board[row][col] > max) {
+                max = board[row][col];
+                maxRow = row;
+                maxCol = col;
+            }
+        }
+    }
 
     for (let row = 0; row < 4; row++) {
         for (let col = 0; col < 4; col++) {
-            if (board[row][col] !== 0) {
+            if (board[row][col] !== 0 && (row !== maxRow || col !== maxCol)) {
                 for (let direction of LOOK_UP_DIRECTIONS) {
                     const { nextRow, nextCol } = furthestTile(board, row, col, direction);
 

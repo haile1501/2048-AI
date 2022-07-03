@@ -25,10 +25,12 @@ export const monotonicity = board => {
             const prevTile = board[prev][col] !== 0 ? Math.log2(board[prev][col]) : 0;
             const nextTile = board[row][col] !== 0 ? Math.log2(board[row][col]) : 0;
 
-            if (prevTile > nextTile) {
-                directionsEval.up += (nextTile - prevTile);
-            } else if (prevTile < nextTile) {
-                directionsEval.down += (prevTile - nextTile);
+            if (prevTile !== 0 && nextTile !== 0) {
+                if (prevTile > nextTile) {
+                    directionsEval.up += (nextTile - prevTile);
+                } else if (prevTile < nextTile) {
+                    directionsEval.down += (prevTile - nextTile);
+                }
             }
             prev = row;
         }
@@ -53,10 +55,12 @@ export const monotonicity = board => {
             const prevTile = board[row][prev] !== 0 ? Math.log2(board[row][prev]) : 0;
             const nextTile = board[row][col] !== 0 ? Math.log2(board[row][col]) : 0;
 
-            if (prevTile > nextTile) {
-                directionsEval.left += (nextTile - prevTile);
-            } else if (prevTile < nextTile) {
-                directionsEval.right += (prevTile - nextTile);
+            if (prevTile !== 0 && nextTile !== 0) {
+                if (prevTile > nextTile) {
+                    directionsEval.left += (nextTile - prevTile);
+                } else if (prevTile < nextTile) {
+                    directionsEval.right += (prevTile - nextTile);
+                }
             }
             prev = col;
         }

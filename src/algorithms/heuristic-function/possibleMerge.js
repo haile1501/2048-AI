@@ -3,6 +3,8 @@ const LOOK_UP_DIRECTIONS = [
     { x: 0, y: 1 },
 ];
 
+
+
 const validPosition = (row, col) => {
     if (row >= 0 && row < 4 && col >= 0 && col < 4) {
         return true;
