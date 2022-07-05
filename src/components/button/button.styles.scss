@@ -5,9 +5,9 @@
     font-weight: 700;
     box-sizing: content-box;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 0.3rem;
 
     &.selected {
-        border: 4px solid white;        
+        border: 0.25rem solid white;        
     }
 }

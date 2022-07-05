@@ -1,20 +1,20 @@
 .score-board {
     display: flex;
-    gap: 10px;
-    width: 545px;
+    gap: 0.625rem;
+    width: 34rem;
     margin: 0 auto;
     justify-content: flex-end;
 
     .score-board-child {
-        border-radius: 5px;
+        border-radius: 0.3rem;
         box-sizing: content-box;
         background-color: #c4b9ac;
         text-align: center;
-        padding: 5px 27px;
+        padding: 0.3rem 1.7rem;
     }
 
     .score-type {
-        font-size: 16px;
+        font-size: 1rem;
         font-weight: 800;
         margin: 0;
         color: #81705d;
@@ -23,7 +23,7 @@
     .score {
         color: rgb(255, 255, 255);
         margin: 0;
-        margin-top: -3px;
-        font-size: 22px;
+        margin-top: -0.2rem;
+        font-size: 1.3rem;
     }
 }
