@@ -26,7 +26,7 @@ const Algorithms = ({ board }) => {
                 direction = ALGORITHMS[algorithm](boardCopy, maxDepth);
             }
             
-            setTimeout(() => window.dispatchEvent(new KeyboardEvent('keydown', {'key': direction})), 100);
+            setTimeout(() => window.dispatchEvent(new KeyboardEvent('keydown', {'key': direction})), 0);
         }
     }, [board, algorithm, maxDepth, numberOfIterations, simulationDepth, gameOver]);
 }

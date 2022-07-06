@@ -76,7 +76,7 @@ const combinedHeuristic = board => {
     const monoWeight = 1.0;
     const smoothWeight = 0.1;
     //const maxWeight = 1.0;
-    const emptyWeight = 2.7;
+    const emptyWeight = 2.75;
     const maxTileCornerWeight = 1.5;
     const possibleWeight = 1.0;
     //const averageWeight = 15;
